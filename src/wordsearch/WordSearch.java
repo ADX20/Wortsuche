@@ -17,29 +17,29 @@ public class WordSearch {
 
 		String Searching_Word = "fisch".toUpperCase();
 
-		for(int i = 0;i < field.length;i++) {
-			//System.out.println(field[i].length);
-			for(int j = 0; j < field[i].length;j++) {
+		for (int i = 0; i < field.length; i++) {
+			// System.out.println(field[i].length);
+			for (int j = 0; j < field[i].length; j++) {
 				char character = Searching_Word.charAt(0);
-				if(field[i][j] == character) {
-					for(int k = 0;k < Searching_Word.length();k++){
+				if (field[i][j] == character) {
+					for (int k = 0; k < Searching_Word.length(); k++) {
 						try {
-						if(field[i][j+k] == Searching_Word.charAt(k)) {
-							System.out.print(field[i][(j+k)]);
-						}else { 
-							break;
+							if (field[i][j + k] == Searching_Word.charAt(k)) {
+								System.out.print(field[i][(j + k)]);
+							} else {
+								break;
 							}
-					}catch(Exception e){
-	
-					}
+						} catch (Exception e) {
+
 						}
+					}
 					System.out.println();
 
-					}
+				}
 			}
 
 		}
 
-		}
-
 	}
+
+}
