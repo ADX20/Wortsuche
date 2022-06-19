@@ -1,417 +1,192 @@
 package wordsearch;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
 import java.io.FileReader;
-import java.util.Scanner;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WordSearch {
 
-	public static void main(String[] args) throws Exception {
-
-		char[][] field = { { 'K', 'Ä', 'S', 'E', 'H', 'S', 'M', 'E', 'C', 'B' },
-				{ 'Z', 'U', 'C', 'K', 'A', 'R', 'R', 'E', 'I', 'S' },
-				{ 'Z', 'H', 'E', 'I', 'S', 'R', 'H', 'F', 'G', 'J' },
-				{ 'F', 'I', 'S', 'C', 'H', 'S', 'M', 'R', 'L', 'O' },
-				{ 'H', 'O', 'N', 'I', 'G', 'S', 'R', 'T', 'R', 'G' },
-				{ 'M', 'A', 'R', 'M', 'E', 'L', 'A', 'D', 'E', 'H' },
-				{ 'B', 'U', 'T', 'T', 'E', 'R', 'U', 'A', 'N', 'U' },
-				{ 'N', 'U', 'D', 'E', 'L', 'N', 'E', 'H', 'M', 'R' },
-				{ 'W', 'U', 'R', 'S', 'T', 'B', 'R', 'O', 'T', 'T' },
-				{ 'A', 'F', 'F', 'L', 'E', 'I', 'S', 'C', 'H', 'F' } };
-
-		FileInput(field);
-
-	}
-
-	public static void FileInput(char[][] field) {
-
-		String Searching_Word[] = {};
-		String FilePath = System.getProperty("user.dir") + "\\src\\wordsearch\\words";
-
-		File file = new File(FilePath);
-		Scanner sc;
-		try {
-			sc = new Scanner(file);
-			int counter = 0;
-			while (sc.hasNextLine()) {
-				//System.out.println(sc.nextLine());
-				try {
-				solve_main(field,((String)sc.nextLine()).toUpperCase());
-				}catch(Exception f) {
-					break;
-				}
-			}
-			//System.out.println(counter);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-	}
-
-	public static void solve_main(char[][] field, String word) {
-		//System.out.println("debig");
-		//System.out.println(word);
-		if(solve_leftToRight(field, word) != -1) { System.out.println("Found Word: "+ word +" using Left-to-Right in line: " + solve_leftToRight(field,word));}
-		if(solve_rightToLeft(field, word) != -1) System.out.println("Found Word: "+ word +"  using Right-to-Left in line: " + solve_rightToLeft(field,word));
-		if(solve_topToBottom(field, word) != -1) System.out.println("Found Word: "+ word +" using Top-to-Bottom in line: " + solve_topToBottom(field,word));
-		if(solve_bottomToTop(field, word) != -1) System.out.println("Found Word: "+ word +" using Bottom-to-Top in line: " + solve_bottomToTop(field,word));
-		if(solve_TopLeftToBottomRight(field, word) != -1) System.out.println("Found Word: "+ word +" using TopLeft-to-BottomRight in line: " + solve_TopLeftToBottomRight(field,word));
-		if(solve_BottomLeftToTopRight(field, word) != -1) System.out.println("Found Word: "+ word +" using BottomLeft-to-TopRight in line: " + solve_BottomLeftToTopRight(field,word));
-		if(solve_TopRightToBottomLeft(field, word) != -1) System.out.println("Found Word: "+ word +" using TopRight-to-BottomLeft in line: " + solve_TopRightToBottomLeft(field,word));
-		if(solve_BottomRightToTopLeft(field, word) != -1) System.out.println("Found Word: "+ word +" using Bottomright-to-TopLeft in line: " + solve_BottomRightToTopLeft(field,word));
-		else if(solve_leftToRight(field, word) == -1 && solve_rightToLeft(field, word) == -1 && solve_topToBottom(field, word) == -1 && solve_bottomToTop(field, word) == -1 && solve_TopLeftToBottomRight(field, word) == -1 && solve_BottomLeftToTopRight(field, word) == -1 && solve_TopRightToBottomLeft(field, word) == -1 && solve_BottomRightToTopLeft(field, word) == -1) System.out.println("The Word: " +word+" has not been found");
-	}
-
-	public static int solve_leftToRight(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i][j + 1] == Searching_Word.charAt(1)) {
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i][j + k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_rightToLeft(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i][j - 1] == Searching_Word.charAt(1)) {
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i][j - k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_topToBottom(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i + 1][j] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i + k][j];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_bottomToTop(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i - 1][j] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i - k][j];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_TopLeftToBottomRight(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i + 1][j + 1] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i + k][j + k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_BottomLeftToTopRight(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i - 1][j + 1] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i - k][j + k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_TopRightToBottomLeft(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i + 1][j - 1] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i + k][j - k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
-
-	public static int solve_BottomRightToTopLeft(char[][] field, String Searching_Word) {
-
-		String Possible_Solution = "";
-		for (int i = 0; i < field.length; i++) {
-			// System.out.println(field[i].length);
-			for (int j = 0; j < field[i].length; j++) {
-				char character = Searching_Word.charAt(0);
-				if (field[i][j] == character) {
-					try {
-						if (field[i - 1][j - 1] == Searching_Word.charAt(1)) {
-
-							for (int k = 0; k < Searching_Word.length(); k++) {
-								try {
-									// System.out.print(field[i][(j + k)]);
-									Possible_Solution += field[i - k][j - k];
-									if (Searching_Word.equals(Possible_Solution)) {
-										try {
-											return i + 1;
-										} catch (Exception e) {
-											return i;
-										}
-									}
-
-								} catch (Exception f) {
-
-								}
-							}
-							// System.out.println(Possible_Solution);
-							// System.out.println();
-							Possible_Solution = "";
-
-						}
-					} catch (Exception e) {
-						break;
-					}
-				}
-
-			}
-
-		}
-
-		return -1;
-	}
+    static char[][] field;
+
+    public static void main(String[] args) {
+        /*
+        char[][] field = {
+                {'E', 'S', 'Ã„', 'K', 'H', 'S', 'M', 'U', 'C', 'B'},
+                {'Z', 'U', 'C', 'K', 'A', 'R', 'R', 'r', 'I', 'S'},
+                {'Z', 'H', 'E', 'T', 'S', 'R', 'Z', 'F', 'G', 'J'},
+                {'F', 'I', 'S', 'C', 'H', 'S', 'K', 'I', 'L', 'O'},
+                {'H', 'O', 'N', 'T', 'G', 'S', 'E', 'T', 'R', 'G'},
+                {'M', 'A', 'R', 'T', 'E', 'L', 'U', 'D', 'E', 'H'},
+                {'B', 'U', 'T', 'T', 'S', 'R', 'Z', 'A', 'N', 'U'},
+                {'N', 'U', 'D', 'E', 'L', 'A', 'E', 'H', 'M', 'R'},
+                {'W', 'U', 'R', 'S', 'T', 'B', 'O', 'O', 'T', 'T'},
+                {'A', 'F', 'F', 'L', 'E', 'O', 'S', 'T', 'H', 'F'}
+         };
+         */
+        field = readFieldFromFile("map.txt");
+
+        findWordsFromFile("words.txt");
+    }
+
+    private static char[][] readFieldFromFile(String path) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            List<char[]> map = new ArrayList<>();
+            while (reader.ready()) {
+                map.add(reader.readLine().toCharArray());
+            }
+            return map.toArray(new char[0][]);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void findWordsFromFile(String path) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(path));
+            while (reader.ready()) {
+                solve_main(reader.readLine());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void solve_main(String word) {
+        word = word.toUpperCase();
+
+        FoundResult result = searchInRow(word);
+        if (result == null) {
+            result = searchInCol(word);
+            if (result == null) {
+                result = searchInDiagonalRight(word);
+                if (result == null) {
+                    result = searchInDiagonalLeft(word);
+                }
+            }
+        }
+
+        if (result == null) {
+            System.out.println("The Word: " + word + " was not found");
+        } else {
+            System.out.println(result);
+        }
+    }
+
+    private static FoundResult checkWordInSlice(String word, StringBuilder rowBuffer, int position, int other, FoundResult.FoundType type) {
+        if (rowBuffer.length() >= word.length()) {
+            String bufferSlice = rowBuffer.substring(Math.max(0, rowBuffer.length() - word.length()));
+            if (bufferSlice.equals(word)) {
+                return new FoundResult(word, false, type, position, other, other + word.length());
+            }
+            if (new StringBuilder(bufferSlice).reverse().toString().equals(word)) {
+                return new FoundResult(word, true, type, position, other - (word.length() - 1), other);
+            }
+        }
+        return null;
+    }
+
+    public static FoundResult searchInRow(String word) {
+        for (int y = 0; y < field.length; y++) {
+            StringBuilder rowBuffer = new StringBuilder();
+            for (int x = 0; x < field[y].length; x++) {
+                rowBuffer.append(field[y][x]);
+                FoundResult result = checkWordInSlice(word, rowBuffer, y, x, FoundResult.FoundType.ROW);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static FoundResult searchInCol(String word) {
+        for (int x = 0; x < field[0].length; x++) {
+            StringBuilder rowBuffer = new StringBuilder();
+            for (int y = 0; y < field.length; y++) {
+                rowBuffer.append(field[y][x]);
+                FoundResult result = checkWordInSlice(word, rowBuffer, x, y, FoundResult.FoundType.COLUMN);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static FoundResult searchInDiagonalRight(String word) {
+        if (field.length >= word.length()) {
+            for (int y = field.length - word.length(); y >= 0; y--) {
+                StringBuilder rowBuffer = new StringBuilder();
+                for (int x = 0; x < field[y].length; x++) {
+                    for (int i = 0; i < field.length - y; i++) {
+                        if (y + i < field.length && x + i < field[y].length) {
+                            rowBuffer.append(field[y + i][x + i]);
+                            FoundResult result = checkWordInSlice(word, rowBuffer, y, x + i, FoundResult.FoundType.DIAGONAL_RIGHT);
+                            if (result != null) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public static FoundResult searchInDiagonalLeft(String word) {
+        if (field.length >= word.length()) {
+            for (int y = field.length - word.length(); y >= 0; y--) {
+                StringBuilder rowBuffer = new StringBuilder();
+                for (int x = field[y].length - 1; x >= 0; x--) {
+                    for (int i = 0; i < field.length - y; i++) {
+                        if (y - i >= 0 && x - i >= 0) {
+                            rowBuffer.append(field[y + i][x - i]);
+                            FoundResult result = checkWordInSlice(word, rowBuffer, y, x + i - word.length() / 2, FoundResult.FoundType.DIAGONAL_LEFT);
+                            if (result != null) {
+                                return result;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public record FoundResult(String word, boolean reversed, FoundType type, int position, int startPosition,
+                              int endPosition) {
+        @Override
+        public String toString() {
+            return "Found Word: " + word + " using " + type.toString(reversed) + " " + type.position + "=" + position + " from " + startPosition + " to " + endPosition;
+        }
+
+        public enum FoundType {
+            ROW("Line", "Left-to-Right", "Right-to-Left"),
+            COLUMN("Column", "Top-to-Bottom", "Bottom-to-Top"),
+            DIAGONAL_RIGHT("Line", "TopLeft-to-BottomRight", "BottomRight-to-TopLeft"),
+            DIAGONAL_LEFT("Line", "TopRight-to-BottomLeft", "BottomLeft-to-TopRight");
+
+            public final String position;
+            private final String normal, reversed;
+
+            FoundType(String position, String normal, String reversed) {
+                this.position = position;
+                this.normal = normal;
+                this.reversed = reversed;
+            }
+
+            public String toString(boolean reversed) {
+                return reversed ? this.reversed : normal;
+            }
+        }
+    }
 
 }
